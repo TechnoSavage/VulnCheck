@@ -44,7 +44,7 @@ def get_vulns(token):
     
 def parse_vendors(data):
     '''
-        Parse top 10 vendors with CVEs associated to CVEs
+        Parse top 10 vendors
 
         :param data: a dict: VulnCheck community API response.
         :returns: a dict: parsed VulnCheck vendor data.
