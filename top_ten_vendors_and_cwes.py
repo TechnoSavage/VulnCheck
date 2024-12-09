@@ -44,7 +44,10 @@ def get_vulns(token):
     
 def parse_vendors(data):
     '''
-        Parse top 10 vendors with CVEs and for each list top CWEs associated to CVEs
+        Parse top 10 vendors with CVEs associated to CVEs
+
+        :param data: a dict: VulnCheck community API response.
+        :returns: a dict: parsed VulnCheck vendor data.
     '''
 
     #Extract a list of all vendors present in the output
@@ -79,6 +82,10 @@ def parse_vendors(data):
 def parse_cwes(vendor_list, data):
     '''
         Parse top CWEs for each of the provided vendors in the vendorList
+
+        :param data: a dict: VulnCheck vendor data from parse_vendors function.
+        :param data: a dict: VulnCheck community API response.
+        :returns: a dict: VulnCheck vendor data with CWEs added.
     '''
     for vendor in vendor_list:
         vendor['cwes'] = []
@@ -97,7 +104,7 @@ def output_format(format, file_name, data):
         
         :param format: A String, the desired output format.
         :param fileName: A String, the filename, minus extension.
-        :para data: json data, file contents
+        :param data: json data, file contents
         :returns None: Calls another function to write the file or prints the output.
     '''
     
