@@ -4,6 +4,7 @@ import datetime
 import json
 import os
 import pandas as pd
+import re
 import requests
 from getpass import getpass
 from requests.exceptions import ConnectionError
@@ -15,7 +16,7 @@ def parse_args():
     parser.add_argument('-p', '--path', help='Path to write file. This argument will take priority over the .env file', 
                         required=False, default=os.environ["SAVE_PATH"])
     parser.add_argument('-o', '--output', dest='output', help='output file format', choices=['json', 'csv', 'excel', 'html'], required=False)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.1')
     return parser.parse_args()
 
 def get_vulns(token):
@@ -81,7 +82,7 @@ def parse_vendors(data):
 
 def parse_cwes(vendor_list, data):
     '''
-        Parse top CWEs for each of the provided vendors in the vendorList
+        Parse CWEs for each of the provided vendors in the vendorList and append to the report.
 
         :param data: a dict: VulnCheck vendor data from parse_vendors function.
         :param data: a dict: VulnCheck community API response.
@@ -96,6 +97,30 @@ def parse_cwes(vendor_list, data):
     # Deduplicate CWE list for each vendor
     for vendor in vendor_list:
         vendor['cwes'] = sorted(set(vendor['cwes']))
+    return vendor_list
+
+def enrich_cwe(vendor_list):
+    '''
+        Call CWE API to add additonal context for each of the provided CWEs
+
+        :param data: a dict: VulnCheck vendor and CWE data from parse_cwes function.
+        :returns: a dict: VulnCheck vendor data with enriched CWE information.
+    '''
+    
+    for entry in vendor_list:
+        for cwe in entry['cwes']:
+            cwe_id = re.findall('CWE-([0-9]+)', cwe)[0]
+            url = f"https://cwe-api.mitre.org/api/v1/cwe/weakness/{cwe_id}"
+            headers = {'Accept': 'application/json',
+                       'Content-Type': 'application/json'}
+            try:
+                response = requests.get(url, headers=headers)
+                content = response.content
+                data = json.loads(content)
+                cwe_name = data['Weaknesses'][0].get('Name', '')
+                entry['cwes'][entry['cwes'].index(cwe)] = f"{cwe}: {cwe_name}"
+            except ConnectionError as error:
+                pass
     return vendor_list
 
 def output_format(format, file_name, data):
@@ -163,7 +188,8 @@ def main():
     results = get_vulns(token)
     vendor_list = parse_vendors(results['data'])
     top_cwes = parse_cwes(vendor_list, results['data'])
-    output_format(args.output, file_name, top_cwes)
+    enriched = enrich_cwe(top_cwes)
+    output_format(args.output, file_name, enriched)
 
 if __name__ == "__main__":
     main()
