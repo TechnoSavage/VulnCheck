@@ -1,0 +1,111 @@
+[
+    {
+        "rank": 1,
+        "name": "Progress",
+        "occurrences": 9,
+        "cwes": [
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+            "CWE-290: Authentication Bypass by Spoofing"
+        ]
+    },
+    {
+        "rank": 2,
+        "name": "Google",
+        "occurrences": 6,
+        "cwes": [
+            "CWE-358: Improperly Implemented Security Check for Standard",
+            "CWE-416: Use After Free",
+            "CWE-787: Out-of-bounds Write",
+            "CWE-843: Access of Resource Using Incompatible Type ('Type Confusion')"
+        ]
+    },
+    {
+        "rank": 3,
+        "name": "Ivanti",
+        "occurrences": 6,
+        "cwes": [
+            "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')",
+            "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')",
+            "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+            "CWE-287: Improper Authentication",
+            "CWE-303: Incorrect Implementation of Authentication Algorithm"
+        ]
+    },
+    {
+        "rank": 4,
+        "name": "Palo Alto Networks",
+        "occurrences": 4,
+        "cwes": [
+            "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')",
+            "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+            "CWE-306: Missing Authentication for Critical Function"
+        ]
+    },
+    {
+        "rank": 5,
+        "name": "Apple",
+        "occurrences": 3,
+        "cwes": []
+    },
+    {
+        "rank": 6,
+        "name": "I-O DATA DEVICE, INC",
+        "occurrences": 3,
+        "cwes": []
+    },
+    {
+        "rank": 7,
+        "name": "Microsoft",
+        "occurrences": 3,
+        "cwes": [
+            "CWE-122: Heap-based Buffer Overflow",
+            "CWE-287: Improper Authentication"
+        ]
+    },
+    {
+        "rank": 8,
+        "name": "ServiceNow",
+        "occurrences": 3,
+        "cwes": [
+            "CWE-184: Incomplete List of Disallowed Inputs",
+            "CWE-1287: Improper Validation of Specified Type of Input"
+        ]
+    },
+    {
+        "rank": 9,
+        "name": "Apache",
+        "occurrences": 2,
+        "cwes": []
+    },
+    {
+        "rank": 10,
+        "name": "Citrix",
+        "occurrences": 2,
+        "cwes": []
+    },
+    {
+        "rank": 11,
+        "name": "CyberPersons",
+        "occurrences": 2,
+        "cwes": [
+            "CWE-276: Incorrect Default Permissions"
+        ]
+    },
+    {
+        "rank": 12,
+        "name": "DocuSign",
+        "occurrences": 2,
+        "cwes": []
+    },
+    {
+        "rank": 13,
+        "name": "PTZOptics",
+        "occurrences": 2,
+        "cwes": [
+            "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+            "CWE-287: Improper Authentication"
+        ]
+    }
+]

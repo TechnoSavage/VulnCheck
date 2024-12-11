@@ -1,0 +1,14 @@
+,rank,name,occurrences,cwes
+0,1,Progress,9,"[""CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"", 'CWE-290: Authentication Bypass by Spoofing']"
+1,2,Google,6,"['CWE-358: Improperly Implemented Security Check for Standard', 'CWE-416: Use After Free', 'CWE-787: Out-of-bounds Write', ""CWE-843: Access of Resource Using Incompatible Type ('Type Confusion')""]"
+2,3,Ivanti,6,"[""CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"", ""CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')"", ""CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"", ""CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"", 'CWE-287: Improper Authentication', 'CWE-303: Incorrect Implementation of Authentication Algorithm']"
+3,4,Palo Alto Networks,4,"[""CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')"", ""CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"", ""CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"", 'CWE-306: Missing Authentication for Critical Function']"
+4,5,Apple,3,[]
+5,6,"I-O DATA DEVICE, INC",3,[]
+6,7,Microsoft,3,"['CWE-122: Heap-based Buffer Overflow', 'CWE-287: Improper Authentication']"
+7,8,ServiceNow,3,"['CWE-184: Incomplete List of Disallowed Inputs', 'CWE-1287: Improper Validation of Specified Type of Input']"
+8,9,Apache,2,[]
+9,10,Citrix,2,[]
+10,11,CyberPersons,2,['CWE-276: Incorrect Default Permissions']
+11,12,DocuSign,2,[]
+12,13,PTZOptics,2,"[""CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"", 'CWE-287: Improper Authentication']"
