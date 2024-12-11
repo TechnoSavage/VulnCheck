@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument('-p', '--path', help='Path to write file. This argument will take priority over the .env file', 
                         required=False, default=os.environ["SAVE_PATH"])
     parser.add_argument('-o', '--output', dest='output', help='output file format', choices=['json', 'csv', 'excel', 'html'], required=False)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.2')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.3')
     return parser.parse_args()
 
 def get_vulns(token):
@@ -94,7 +94,7 @@ def parse_cwes(vendor_list, data):
                     vendor['cwes'].append(cwe)
     # Deduplicate CWE list for each vendor
     for vendor in vendor_list:
-        vendor['cwes'] = sorted(set(vendor['cwes']))
+        vendor['cwes'] = sorted(set(vendor['cwes']), key=lambda x: int(x.split('-')[1]))
     return vendor_list
 
 def enrich_cwe(vendor_list):
