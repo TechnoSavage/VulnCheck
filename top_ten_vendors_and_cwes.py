@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument('-p', '--path', help='Path to write file. This argument will take priority over the .env file', 
                         required=False, default=os.environ["SAVE_PATH"])
     parser.add_argument('-o', '--output', dest='output', help='output file format', choices=['json', 'csv', 'excel', 'html'], required=False)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.1')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.2')
     return parser.parse_args()
 
 def get_vulns(token):
@@ -69,13 +69,6 @@ def parse_vendors(data):
     while vendor_count[end_index][1] == vendor_count[end_index + 1][1]:
         end_index += 1
     top = vendor_count[:end_index]
-    # #Create a list of top 10 vendors
-    # top  = vendor_count[:10]
-    # #Append to vendor list if value of last vendor is tied with others that didn't make the top ten cut
-    # final_value = top[-1][1]
-    # for entry in vendor_count[11:]:
-    #     if entry[1] == final_value:
-    #         top.append(entry)
     top_vendors = []
     for vendor in top:
         entry = {}
