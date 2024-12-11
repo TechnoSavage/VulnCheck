@@ -64,17 +64,22 @@ def parse_vendors(data):
             vendor_count[instance] += 1
     #Reorder vendorCount by value
     vendor_count = sorted(vendor_count.items(), key=lambda x:x[1], reverse=True)
-    #Create a list of top 10 vendors
-    top_ten  = vendor_count[:10]
-    #Append to vendor list if value of last vendor is tied with others that didn't make the top ten cut
-    final_value = top_ten[-1][1]
-    for entry in vendor_count[11:]:
-        if entry[1] == final_value:
-            top_ten.append(entry)
+    # Create a list of minimum top 10 vendors but accounting for ties for the final place
+    end_index = 10
+    while vendor_count[end_index][1] == vendor_count[end_index + 1][1]:
+        end_index += 1
+    top = vendor_count[:end_index]
+    # #Create a list of top 10 vendors
+    # top  = vendor_count[:10]
+    # #Append to vendor list if value of last vendor is tied with others that didn't make the top ten cut
+    # final_value = top[-1][1]
+    # for entry in vendor_count[11:]:
+    #     if entry[1] == final_value:
+    #         top.append(entry)
     top_vendors = []
-    for vendor in top_ten:
+    for vendor in top:
         entry = {}
-        entry['rank'] = top_ten.index(vendor) + 1
+        entry['rank'] = top.index(vendor) + 1
         entry['name'] = vendor[0]
         entry['occurrences'] = vendor[1]
         top_vendors.append(entry) 
