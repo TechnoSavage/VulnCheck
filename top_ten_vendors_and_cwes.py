@@ -230,8 +230,7 @@ def main():
         exit()
     #Handle argument to return all pages
     if args.all:
-        pages = check_pages(token)
-        args.number = pages
+        args.number = check_pages(token)
     results = get_vulns(token, args.number)
     if len(results) == 0:
         print("API request failed to return any data.")
