@@ -13,21 +13,26 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Retrieve vulnerabilities from VulnCheck KEV.")
     parser.add_argument('-k', '--key', dest='token', help='Prompt for API key (do not enter at command line). This argument will take priority over the .env file', 
                         nargs='?', const=None, required=False, default=os.environ["VULNCHECK_API_TOKEN"])
+    parser.add_argument('-n', '--number', help='Number of pages to return; defaults to 1 page if argument is not supplied.',
+                         type=int, required=False, default=1)
+    parser.add_argument('-a', '--all', help='Fetch and retrun all available pages from API endpoint.', action='store_true', required=False)
+    parser.add_argument('-c', '--check', help='Check the number of available pages in the API response.', action='store_true', required=False)
     parser.add_argument('-p', '--path', help='Path to write file. This argument will take priority over the .env file', 
                         required=False, default=os.environ["SAVE_PATH"])
     parser.add_argument('-o', '--output', dest='output', help='output file format', choices=['json', 'csv', 'excel', 'html'], required=False)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.3')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.4')
     return parser.parse_args()
 
-def get_vulns(token):
+def check_pages(token):
     '''
-        Retrieve data from VulnCheck Community API endpoint.
+        Retrieve data from VulnCheck Community API endpoint and return
+        the total number of available pages.
         
         :param token: A string, API Key.
         :returns: a dict, JSON object of vulnerabilities.
         :raises: ConnectionError: if unable to successfully make GET request.
     '''
-
+    
     url = "https://api.vulncheck.com/v3/index/vulncheck-kev"
     headers = {'Accept': 'application/json',
                'Authorization': f'Bearer {token}'}
@@ -38,10 +43,38 @@ def get_vulns(token):
             exit()
         content = response.content
         data = json.loads(content)
-        return data
+        return data['_meta']['total_pages']
     except ConnectionError as error:
         content = "No Response"
         raise error
+
+def get_vulns(token, pages):
+    '''
+        Retrieve data from VulnCheck Community API endpoint.
+        
+        :param token: A string, API Key.
+        :returns: a dict, JSON object of vulnerabilities.
+        :raises: ConnectionError: if unable to successfully make GET request.
+    '''
+    total_response = []
+    for i in range(pages):
+        url = "https://api.vulncheck.com/v3/index/vulncheck-kev"
+        params = {'page': i + 1}
+        headers = {'Accept': 'application/json',
+                   'Authorization': f'Bearer {token}'}
+        try:
+            response = requests.get(url, params=params, headers=headers)
+            if response.status_code != 200:
+                print('unable to retrieve Vulns from VulnCheck' + response)
+                exit()
+            content = response.content
+            data = json.loads(content)
+            for item in data['data']:
+                total_response.append(item)
+        except ConnectionError as error:
+            content = "No Response"
+            raise error
+    return total_response
     
 def parse_vendors(data):
     '''
@@ -115,7 +148,10 @@ def enrich_cwe(vendor_list):
                 response = requests.get(url, headers=headers)
                 content = response.content
                 data = json.loads(content)
-                cwe_name = data['Weaknesses'][0].get('Name', '')
+                try:
+                    cwe_name = data['Weaknesses'][0].get('Name', '')
+                except:
+                    cwe_name = 'Name not found'
                 entry['cwes'][entry['cwes'].index(cwe)] = f"{cwe}: {cwe_name}"
             except ConnectionError as error:
                 pass
@@ -178,14 +214,30 @@ def write_file(file_name, contents):
     
 def main():
     args = parse_args()
+    #Check that number argument is positive integer
+    if args.number and args.number <= 0:
+        print('Value for "-n"/"--number" argument must be a positive integer greater than "0"')
+        exit()
     #Output report name; default uses UTC time
     file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{str(datetime.datetime.now(datetime.timezone.utc))}'
     token = args.token
     if token == None:
         token = getpass(prompt="Enter your VulnCheck API Key: ")
-    results = get_vulns(token)
-    vendor_list = parse_vendors(results['data'])
-    top_cwes = parse_cwes(vendor_list, results['data'])
+    #Handle check for number of available pages
+    if args.check:
+        pages = check_pages(token)
+        print(f'There are {pages} total pages available to return.')
+        exit()
+    #Handle argument to return all pages
+    if args.all:
+        pages = check_pages(token)
+        args.number = pages
+    results = get_vulns(token, args.number)
+    if len(results) == 0:
+        print("API request failed to return any data.")
+        exit()
+    vendor_list = parse_vendors(results)
+    top_cwes = parse_cwes(vendor_list, results)
     enriched = enrich_cwe(top_cwes)
     output_format(args.output, file_name, enriched)
 
