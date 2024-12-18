@@ -219,7 +219,8 @@ def main():
         print('Value for "-n"/"--number" argument must be a positive integer greater than "0"')
         exit()
     #Output report name; default uses UTC time
-    file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{str(datetime.now(timezone.utc).strftime('%y-%m-%d%Z_%H-%M-%S'))}'
+    timestamp = str(datetime.now(timezone.utc).strftime('%y-%m-%d%Z_%H-%M-%S'))
+    file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{timestamp}'
     token = args.token
     if token == None:
         token = getpass(prompt="Enter your VulnCheck API Key: ")
