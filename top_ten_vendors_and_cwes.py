@@ -1,11 +1,11 @@
 
 import argparse
-import datetime
 import json
 import os
 import pandas as pd
 import re
 import requests
+from datetime import datetime, timezone
 from getpass import getpass
 from requests.exceptions import ConnectionError
 
@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument('-p', '--path', help='Path to write file. This argument will take priority over the .env file', 
                         required=False, default=os.environ["SAVE_PATH"])
     parser.add_argument('-o', '--output', dest='output', help='output file format', choices=['json', 'csv', 'excel', 'html'], required=False)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.5')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.6')
     return parser.parse_args()
 
 def check_pages(token):
@@ -219,7 +219,7 @@ def main():
         print('Value for "-n"/"--number" argument must be a positive integer greater than "0"')
         exit()
     #Output report name; default uses UTC time
-    file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{str(datetime.datetime.now(datetime.timezone.utc))}'.replace(' ', '-')
+    file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{str(datetime.now(timezone.utc).strftime('%y-%m-%d%Z_%H-%M-%S'))}'
     token = args.token
     if token == None:
         token = getpass(prompt="Enter your VulnCheck API Key: ")
