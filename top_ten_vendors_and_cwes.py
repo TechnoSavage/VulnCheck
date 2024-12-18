@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument('-p', '--path', help='Path to write file. This argument will take priority over the .env file', 
                         required=False, default=os.environ["SAVE_PATH"])
     parser.add_argument('-o', '--output', dest='output', help='output file format', choices=['json', 'csv', 'excel', 'html'], required=False)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.4')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.5')
     return parser.parse_args()
 
 def check_pages(token):
@@ -219,7 +219,7 @@ def main():
         print('Value for "-n"/"--number" argument must be a positive integer greater than "0"')
         exit()
     #Output report name; default uses UTC time
-    file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{str(datetime.datetime.now(datetime.timezone.utc))}'
+    file_name = f'{args.path}Top_Ten_Vendors_and_CWEs_Report_{str(datetime.datetime.now(datetime.timezone.utc))}'.replace(' ', '-')
     token = args.token
     if token == None:
         token = getpass(prompt="Enter your VulnCheck API Key: ")
